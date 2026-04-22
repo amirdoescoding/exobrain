@@ -1,0 +1,9 @@
+{
+  "id": "unread-indicator",
+  "name": "Unread Indicator",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Shows a visual dot on notes modified since they were last opened.",
+  "author": "AI Alfred",
+  "isDesktopOnly": false
+}
