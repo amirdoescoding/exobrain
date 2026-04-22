@@ -7,10 +7,17 @@
   },
   "files": [
     "bin/",
-    "vault/",
     "scripts/",
     "setup.sh",
-    "requirements.txt"
+    "requirements.txt",
+    "vault/CLAUDE.md",
+    "vault/.obsidian/",
+    "vault/01 Updates/",
+    "vault/_Templates/",
+    "vault/_Attachments/",
+    "vault/_Bases/",
+    "vault/05 Projects/daily_brief_prompt.txt",
+    "vault/05 Projects/daily_brief.py"
   ],
   "keywords": [
     "obsidian",
