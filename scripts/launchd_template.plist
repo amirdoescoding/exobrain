@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.exobrain.dailybrief</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>EXOBRAIN_SCRIPT_PATH</string>
+    </array>
+
+    <!-- Fire at EXOBRAIN_HOUR:EXOBRAIN_MINUTE local time every day -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>EXOBRAIN_HOUR</integer>
+        <key>Minute</key>
+        <integer>EXOBRAIN_MINUTE</integer>
+    </dict>
+
+    <!-- If the machine was asleep at scheduled time, run as soon as it wakes -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>EXOBRAIN_LOG_PATH</string>
+
+    <key>StandardErrorPath</key>
+    <string>EXOBRAIN_LOG_PATH</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>EXOBRAIN_HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>EXOBRAIN_HOME</string>
+    </dict>
+</dict>
+</plist>
