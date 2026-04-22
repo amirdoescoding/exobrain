@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AI-powered second brain — daily briefings, content summarization, and a living knowledge library in Obsidian",
   "bin": {
-    "exobrain": "./bin/cli.js"
+    "exobrain": "bin/cli.js"
   },
   "files": [
     "bin/",
@@ -32,7 +32,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/amirdoescoding/exobrain.git"
+    "url": "git+https://github.com/amirdoescoding/exobrain.git"
   },
   "homepage": "https://amirdoescoding.github.io/exobrain",
   "engines": {
