@@ -1,6 +1,6 @@
 {
   "name": "exobrain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AI-powered second brain — daily briefings, content summarization, and a living knowledge library in Obsidian",
   "bin": {
     "exobrain": "bin/cli.js"

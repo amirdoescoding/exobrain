@@ -131,7 +131,23 @@ copy_vault() {
     else
         cp -r "$REPO_DIR/vault" "$VAULT_PATH"
     fi
-    ok "Vault skeleton copied"
+
+    # npm strips empty directories from packages — create them explicitly
+    local dirs=(
+        "02 Daily"
+        "03 Meetings"
+        "04 People"
+        "06 Research"
+        "07 References"
+        "08 Summaries"
+        "_Attachments"
+        "_Bases"
+    )
+    for dir in "${dirs[@]}"; do
+        mkdir -p "$VAULT_PATH/$dir"
+    done
+
+    ok "Vault structure created"
 }
 
 # ──────────────────────────────────────────────────────────────
