@@ -88,10 +88,12 @@ gather_config() {
     read -r -p "  Your country [United States]: " COUNTRY
     COUNTRY="${COUNTRY:-United States}"
 
-    # Timezone
+    # Timezone — resolve full IANA name (e.g. Europe/Rome, not legacy alias "Rome")
     local detected_tz
-    detected_tz="$(readlink /etc/localtime | sed 's|.*/zoneinfo/||')" 2>/dev/null || true
+    detected_tz="$(python3 -c 'import datetime; print(datetime.datetime.now().astimezone().tzname())' 2>/dev/null)" || true
+    detected_tz="$(readlink /etc/localtime 2>/dev/null | sed 's|.*/zoneinfo/||')" || true
     detected_tz="${detected_tz:-America/New_York}"
+    echo "  Tip: use full IANA format, e.g. Europe/Rome, America/New_York, Asia/Tokyo"
     read -r -p "  Timezone [$detected_tz]: " TIMEZONE
     TIMEZONE="${TIMEZONE:-$detected_tz}"
 
