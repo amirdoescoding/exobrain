@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+*.log
+vault/.obsidian/workspace.json
+vault/.obsidian/plugins/unread-indicator/data.json
