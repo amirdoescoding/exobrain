@@ -168,6 +168,9 @@ substitute_placeholders() {
         "$VAULT_PATH/CLAUDE.md"
         "$VAULT_PATH/05 Projects/daily_brief_prompt.txt"
         "$VAULT_PATH/05 Projects/daily_brief.py"
+        "$VAULT_PATH/05 Projects/gmail_brief.py"
+        "$VAULT_PATH/05 Projects/calendar_brief.py"
+        "$VAULT_PATH/05 Projects/google_auth_setup.py"
     )
 
     for f in "${files[@]}"; do
@@ -215,7 +218,79 @@ build_plugin() {
 }
 
 # ──────────────────────────────────────────────────────────────
-# 7. Create launchd automation
+# 7. Optional: Gmail + Google Calendar
+# ──────────────────────────────────────────────────────────────
+setup_google_auth() {
+    step "Gmail + Google Calendar (optional)"
+    echo "  Adds calendar events and unread emails to your daily brief."
+    echo "  Requires a free Google Cloud project (~5 min one-time setup)."
+    echo ""
+    echo "  You can always set this up later by running:"
+    echo "    python3 \"$VAULT_PATH/05 Projects/google_auth_setup.py\""
+    echo ""
+    read -r -p "  Set up Gmail + Google Calendar? [y/N]: " google_confirm
+    google_confirm="${google_confirm:-N}"
+
+    if [[ ! "$google_confirm" =~ ^[Yy]$ ]]; then
+        ok "Skipped — brief will show weather + news only"
+        return
+    fi
+
+    echo ""
+    echo "  Follow these steps to create your Google credentials:"
+    echo ""
+    echo "  1. Go to https://console.cloud.google.com/"
+    echo "  2. Create a new project (or select an existing one)"
+    echo "  3. APIs & Services → Library → Enable:"
+    echo "       Gmail API"
+    echo "       Google Calendar API"
+    echo "  4. APIs & Services → OAuth consent screen"
+    echo "       User type: External → Create"
+    echo "       Add your Google email under 'Test users'"
+    echo "  5. APIs & Services → Credentials → + Create Credentials"
+    echo "       → OAuth client ID → Application type: Desktop app"
+    echo "  6. Download the JSON file"
+    echo ""
+
+    # Try to auto-detect a downloaded credentials file
+    local detected_creds=""
+    local newest
+    newest="$(ls -t "$HOME/Downloads"/client_secret*.json 2>/dev/null | head -1)"
+    if [ -n "$newest" ]; then
+        detected_creds="$newest"
+    fi
+
+    local default_display="${detected_creds:-~/Downloads/client_secret_*.json}"
+    read -r -p "  Path to downloaded credentials JSON [$default_display]: " creds_input
+    creds_input="${creds_input:-$detected_creds}"
+    creds_input="${creds_input/#\~/$HOME}"
+
+    if [ -z "$creds_input" ] || [ ! -f "$creds_input" ]; then
+        warn "Credentials file not found — skipping Google setup"
+        echo "  Run manually when ready:"
+        echo "    cp ~/Downloads/client_secret_*.json ~/.exobrain_google_credentials.json"
+        echo "    python3 \"$VAULT_PATH/05 Projects/google_auth_setup.py\""
+        return
+    fi
+
+    cp "$creds_input" "$HOME/.exobrain_google_credentials.json"
+    ok "Credentials saved to ~/.exobrain_google_credentials.json"
+
+    echo ""
+    echo "  Opening browser for Google authorization..."
+    echo "  (A browser window will open — sign in and grant access)"
+    echo ""
+
+    if python3 "$VAULT_PATH/05 Projects/google_auth_setup.py"; then
+        ok "Gmail + Google Calendar connected"
+    else
+        warn "Authorization failed — run manually when ready:"
+        echo "    python3 \"$VAULT_PATH/05 Projects/google_auth_setup.py\""
+    fi
+}
+
+# ──────────────────────────────────────────────────────────────
+# 8. Create launchd automation
 # ──────────────────────────────────────────────────────────────
 setup_launchd() {
     step "Setting up daily brief automation (launchd)"
@@ -296,6 +371,7 @@ main() {
     copy_vault
     substitute_placeholders
     install_python_deps
+    setup_google_auth
     build_plugin
     setup_launchd
     print_next_steps

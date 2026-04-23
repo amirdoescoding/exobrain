@@ -45,7 +45,17 @@ Fires automatically at **9:00 AM** ({{TIMEZONE}}) via macOS launchd — persiste
 To disable: `launchctl unload ~/Library/LaunchAgents/com.exobrain.dailybrief.plist`
 To re-enable: `launchctl load ~/Library/LaunchAgents/com.exobrain.dailybrief.plist`
 
-Workflow: weather (web search, {{CITY}}) → news web search (4 categories) → write daily note to `02 Daily/YYYY/MM/MM-DD-YY ddd.md` → update `01 Updates/` living documents → create reference stubs in `07 References/` → create person profiles in `04 People/`.
+Workflow: weather (web search, {{CITY}}) → Google Calendar (`calendar_brief.py`, optional) → Gmail (`gmail_brief.py`, optional) → news web search (4 categories) → write daily note to `02 Daily/YYYY/MM/MM-DD-YY ddd.md` → update `01 Updates/` living documents → create reference stubs in `07 References/` → create person profiles in `04 People/`.
+
+## Gmail + Google Calendar
+
+Both integrations are optional and degrade gracefully — the brief skips them with a note if the token is missing.
+
+- **Token**: `~/.exobrain_google_token.json` (auto-refreshed, never expires unless revoked)
+- **Credentials**: `~/.exobrain_google_credentials.json` (OAuth client secret from Google Cloud Console)
+- **Re-authorize**: `python3 "05 Projects/google_auth_setup.py"`
+- **Gmail script**: `python3 "05 Projects/gmail_brief.py"` — unread emails from last 24h, noise-filtered
+- **Calendar script**: `python3 "05 Projects/calendar_brief.py"` — today's events in {{TIMEZONE}}
 
 ## Summarization
 

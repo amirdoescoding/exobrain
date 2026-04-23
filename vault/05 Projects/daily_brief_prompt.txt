@@ -16,6 +16,22 @@ STEP 1 — WEATHER
 Web-search: weather {{CITY}} {{COUNTRY}} today {date_search}
 Extract: current conditions, temperature (current + high/low), any precipitation warning.
 
+STEP 1b — CALENDAR
+Run this bash command and capture its output:
+```bash
+python3 "{{VAULT_PATH}}/05 Projects/calendar_brief.py" {date_str}
+```
+If the command exits with code 1 (token missing), set calendar_events = "_Google Calendar not connected — run: python3 \"05 Projects/google_auth_setup.py\"_"
+Otherwise use the stdout output as calendar_events.
+
+STEP 1c — GMAIL
+Run this bash command and capture its output:
+```bash
+python3 "{{VAULT_PATH}}/05 Projects/gmail_brief.py"
+```
+If the command exits with code 1 (token missing), set inbox = "_Gmail not connected — run: python3 \"05 Projects/google_auth_setup.py\"_"
+Otherwise use the stdout output as inbox.
+
 STEP 2 — NEWS (exact date only — search with quoted date, discard results from other dates)
 Run all four searches. Only include stories published on {date_search}.
 
@@ -52,6 +68,12 @@ type: daily-brief
 
 ## Weather — {{CITY}}
 {weather}
+
+## Calendar
+{calendar_events}
+
+## Inbox
+{inbox}
 
 ## Top News
 
