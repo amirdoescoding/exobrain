@@ -30,7 +30,17 @@ check_prerequisites() {
     if command -v claude &>/dev/null || [ -x "$HOME/.local/bin/claude" ]; then
         ok "Claude Code CLI found"
     else
-        err "Claude Code CLI not found. Install from: https://claude.ai/code"
+        err "Claude Code CLI not found"
+        echo ""
+        echo "     ExoBrain is powered by Claude Code — Anthropic's AI CLI."
+        echo "     It requires an Anthropic API key (~\$5–15/month at typical usage)."
+        echo ""
+        echo "     Install it:"
+        echo "       1. Go to https://claude.ai/code"
+        echo "       2. Download and install Claude Code"
+        echo "       3. Run: claude  (follow the API key setup prompt)"
+        echo "       4. Re-run: npx exobrain"
+        echo ""
         missing=1
     fi
 
@@ -38,7 +48,15 @@ check_prerequisites() {
     if command -v python3 &>/dev/null; then
         ok "Python 3 found ($(python3 --version 2>&1))"
     else
-        err "Python 3 not found. Install from: https://python.org"
+        err "Python 3 not found"
+        echo ""
+        echo "     Python 3 is required for Gmail, Calendar, and PDF summarization."
+        echo ""
+        echo "     Install it:"
+        echo "       Option A (recommended): https://brew.sh — then: brew install python3"
+        echo "       Option B: https://python.org/downloads"
+        echo "       Re-run: npx exobrain"
+        echo ""
         missing=1
     fi
 
@@ -46,19 +64,20 @@ check_prerequisites() {
     if command -v npm &>/dev/null; then
         ok "npm found ($(npm --version))"
     else
-        warn "npm not found — unread-indicator plugin won't be rebuilt (pre-built version will be used)"
+        warn "npm not found — unread-indicator plugin will use pre-built version (no action needed)"
     fi
 
     # Obsidian
     if [ -d "/Applications/Obsidian.app" ]; then
         ok "Obsidian found"
     else
-        warn "Obsidian not found in /Applications — install from https://obsidian.md before opening your vault"
+        warn "Obsidian not found in /Applications"
+        echo "     Install from https://obsidian.md (free) before opening your vault"
     fi
 
     if [ "$missing" -eq 1 ]; then
         echo ""
-        err "Please install missing prerequisites and re-run setup."
+        err "Fix the above and re-run: npx exobrain"
         exit 1
     fi
 }
