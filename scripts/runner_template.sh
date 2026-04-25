@@ -20,6 +20,18 @@ if [ ! -f "$PROMPT_FILE" ]; then
     exit 1
 fi
 
+# Wait for network — the machine may have just woken from sleep
+NETWORK_WAIT=0
+until curl -s --max-time 5 https://api.anthropic.com > /dev/null 2>&1; do
+    if [ "$NETWORK_WAIT" -ge 120 ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') — ERROR: network not available after 2 min, aborting" >> "$LOG"
+        exit 1
+    fi
+    sleep 5
+    NETWORK_WAIT=$((NETWORK_WAIT + 5))
+done
+echo "$(date '+%Y-%m-%d %H:%M:%S') — Network ready (waited ${NETWORK_WAIT}s)" >> "$LOG"
+
 cd "$VAULT"
 "$CLAUDE" \
     --dangerously-skip-permissions \
